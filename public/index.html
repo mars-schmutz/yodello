@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <title>Yodello</title>
+</head>
+<body>
+    <div id="app">
+        <div id="new-task">
+            <h1>New Task</h1>
+            <div>
+                <input type="text" v-model="newName" placeholder="Task Name">
+                <input type="text" v-model="newDesc" placeholder="Task Description">
+                <input type="text" v-model="newDue" placeholder="Task Due Date">
+                <button @click="addTask">Add Task</button>
+            </div>
+        </div>
+        <div id="yodels">
+            <div id="todo">
+                <h1>TODO</h1>
+                <transition-group name="fade">
+                    <div class="item" v-for="task in todoTasks" :data-id="task.task.id" :key="task.task.id">
+                        <span class="close" :data-id="task.task.id" @click="deleteTask(this)">&#9587;</span>
+                        <h2>{{ task.task.name }}</h2>
+                        <h4>Description:</h4>
+                        <p>{{ task.task.description }}</p>
+                        <h4>Due Date:</h4>
+                        <p>{{ task.task.dueDate }}</p>
+                        <select :data-id="task.task.id" @change="changePriority($event)">
+                            <option value="todo" selected>Todo</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="done">Done</option>
+                        </select>
+                        <button @click="editTask(task)">{{ editTxt }}</button>
+                        <template v-if="task.editing">
+                            <form @submit.prevent="updateTask(task)">
+                                <input type="text" v-model="editName">
+                                <input type="text" v-model="editDesc">
+                                <input type="text" v-model="editDue">
+                                <button type="submit">Update</button>
+                            </form>
+                        </template>
+                    </div>
+                </transition-group>
+            </div>
+            <div id="in-progress">
+                <h1>In Progress</h1>
+                <transition-group name="fade">
+                    <div class="item" v-for="task in inProgressTasks" :data-id="task.task.id" :key="task.task.id">
+                        <span class="close" :data-id="task.task.id" @click="deleteTask(this)">&#9587;</span>
+                        <h2>{{ task.task.name }}</h2>
+                        <h4>Description:</h4>
+                        <p>{{ task.task.description }}</p>
+                        <h4>Due Date:</h4>
+                        <p>{{ task.task.dueDate }}</p>
+                        <select :data-id="task.task.id" @change="changePriority($event)">
+                            <option value="todo">Todo</option>
+                            <option value="in-progress" selected>In Progress</option>
+                            <option value="done">Done</option>
+                        </select>
+                        <button @click="editTask(task)">{{ editTxt }}</button>
+                        <template v-if="task.editing">
+                            <form @submit.prevent="updateTask(task)">
+                                <input type="text" v-model="editName">
+                                <input type="text" v-model="editDesc">
+                                <input type="text" v-model="editDue">
+                                <button type="submit">Update</button>
+                            </form>
+                        </template>
+                    </div>
+                </transition-group>
+            </div>
+            <div id="done">
+                <h1>Done</h1>
+                <transition-group name="fade">
+                    <div class="item" v-for="task in doneTasks" :data-id="task.task.id" :key="task.task.id">
+                        <span class="close" :data-id="task.task.id" @click="deleteTask(this)">&#9587;</span>
+                        <h2>{{ task.task.name }}</h2>
+                        <h4>Description:</h4>
+                        <p>{{ task.task.description }}</p>
+                        <h4>Due Date:</h4>
+                        <p>{{ task.task.dueDate }}</p>
+                        <select :data-id="task.task.id" @change="changePriority($event)">
+                            <option value="todo">Todo</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="done" selected>Done</option>
+                        </select>
+                        <button @click="editTask(task)">{{ editTxt }}</button>
+                        <template v-if="task.editing">
+                            <form @submit.prevent="updateTask(task)">
+                                <input type="text" v-model="editName">
+                                <input type="text" v-model="editDesc">
+                                <input type="text" v-model="editDue">
+                                <button type="submit">Update</button>
+                            </form>
+                        </template>
+                    </div>
+                </transition-group>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
